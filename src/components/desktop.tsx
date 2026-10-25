@@ -16,6 +16,7 @@ import HoverHeading from "@/components/hover-heading"
 import WeatherWidget from "@/components/weather-widget"
 import SpotifyWidget from "@/components/spotify-widget"
 import TechStackWidget from "@/components/tech-stack-widget"
+import ContactWidget from "@/components/contact-widget"
 
 interface DesktopProps {
   onLogout: () => void
@@ -161,8 +162,9 @@ export default function Desktop({
           />
         </div>
 
-        <div className="absolute top-8 right-4 z-0">
+        <div className="absolute top-8 right-4 z-0 flex flex-col gap-4">
           <TechStackWidget />
+          <ContactWidget />
         </div>
 
         <div className="absolute inset-0 z-0 flex flex-col items-center justify-center pointer-events-none text-center px-6">
