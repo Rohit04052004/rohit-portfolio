@@ -44,9 +44,9 @@ export default function WeatherWidget() {
   const Icon = weather ? conditionIcon(weather.condition, weather.isDay) : MoonStar
 
   return (
-    <div className="liquid-glass-panel w-44 rounded-3xl shadow-xl p-4 text-white">
+    <div className="liquid-glass-panel w-32 min-[425px]:w-44 rounded-3xl shadow-xl p-3 min-[425px]:p-4 text-white">
       <p className="text-sm font-medium truncate">{weather?.city ?? "Bengaluru"}</p>
-      <p className="text-5xl font-light leading-tight mt-1">{weather ? `${weather.temp}°` : "--°"}</p>
+      <p className="text-4xl min-[425px]:text-5xl font-light leading-tight mt-1">{weather ? `${weather.temp}°` : "--°"}</p>
 
       <div className="mt-5 flex items-center gap-1.5 text-white/90">
         <Icon className="w-4 h-4" />

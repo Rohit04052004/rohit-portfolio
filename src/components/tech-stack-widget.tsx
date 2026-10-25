@@ -32,14 +32,14 @@ export default function TechStackWidget() {
   if (items === null || items.length === 0) return null
 
   return (
-    <div className="liquid-glass-panel w-44 rounded-3xl shadow-xl p-4 text-white">
-      <p className="text-sm font-medium mb-3">Tech Stack</p>
-      <div className="grid grid-cols-4 gap-2">
+    <div className="liquid-glass-panel w-32 min-[425px]:w-44 rounded-3xl shadow-xl p-3 min-[425px]:p-4 text-white">
+      <p className="text-sm font-medium mb-2 min-[425px]:mb-3">Tech Stack</p>
+      <div className="grid grid-cols-4 gap-1.5 min-[425px]:gap-2">
         {items.map((item) => (
           <div
             key={item.id}
             title={item.name}
-            className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 overflow-hidden"
+            className="flex h-6 w-6 min-[425px]:h-8 min-[425px]:w-8 items-center justify-center rounded-lg bg-white/10 overflow-hidden"
           >
             {item.logoUrl ? (
               // eslint-disable-next-line @next/next/no-img-element

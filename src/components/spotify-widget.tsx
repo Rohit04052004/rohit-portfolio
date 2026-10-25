@@ -11,12 +11,12 @@ export default function SpotifyWidget({ onOpen }: SpotifyWidgetProps) {
   const { currentTrack, isPlaying, isAudioReady, togglePlay, next, previous } = useSpotifyPlayer()
 
   return (
-    <div className="liquid-glass-panel w-44 rounded-3xl shadow-xl p-4 text-white">
+    <div className="liquid-glass-panel w-32 min-[425px]:w-44 rounded-3xl shadow-xl p-3 min-[425px]:p-4 text-white">
       <div className="flex items-center gap-3 cursor-pointer" onClick={onOpen}>
         <img
           src={currentTrack.cover || "/placeholder.svg"}
           alt={currentTrack.title}
-          className="w-10 h-10 rounded-lg object-cover shrink-0"
+          className="w-8 h-8 min-[425px]:w-10 min-[425px]:h-10 rounded-lg object-cover shrink-0"
         />
         <div className="min-w-0">
           <p className="text-sm font-medium truncate">{currentTrack.title}</p>
@@ -24,7 +24,7 @@ export default function SpotifyWidget({ onOpen }: SpotifyWidgetProps) {
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-center gap-4">
+      <div className="mt-3 min-[425px]:mt-4 flex items-center justify-center gap-2 min-[425px]:gap-4">
         <button
           onClick={(e) => {
             e.stopPropagation()
