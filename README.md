@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Rohit's portfolio site — a macOS-desktop-styled portfolio built with Next.js, Tailwind, and Prisma/SQLite.
 
-## Getting Started
+## Roles
 
-First, run the development server:
+- **Viewer** (default, no login): can browse projects, resume, and contact info.
+- **Admin** (Rohit): logs in at `/admin/login` with the password in `ADMIN_PASSWORD`, then manages everything from `/admin` — projects, profile/bio, resume upload, and contact links. Changes save to the database immediately and show up on the public site right away.
+
+## Getting started
 
 ```bash
+npm install
+cp .env.example .env   # then fill in ADMIN_PASSWORD and SESSION_SECRET
+npx prisma migrate dev
+npx prisma db seed     # adds mock content you can replace from /admin
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) for the public site, and [http://localhost:3000/admin/login](http://localhost:3000/admin/login) to sign in as admin.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Generate a `SESSION_SECRET` with:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
 
-## Learn More
+## Known limitation: file uploads in production
 
-To learn more about Next.js, take a look at the following resources:
+Admin-uploaded images/resume PDFs are written to `public/uploads` on disk. That works locally, but **will not persist** on serverless hosts like Vercel (the filesystem is ephemeral/read-only at runtime). Before deploying there, swap the upload route (`src/app/api/upload/route.ts`) to use object storage (e.g. Vercel Blob or S3).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Similarly, the SQLite database file (`prisma/dev.db`) is local-only — for a persistent production database, point `DATABASE_URL` at a hosted SQLite-compatible service (e.g. Turso/libSQL) instead.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tech stack
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Next.js (App Router) · TypeScript · Tailwind CSS v4 · Prisma 7 (SQLite via `better-sqlite3` driver adapter) · `jose` for signed session cookies.

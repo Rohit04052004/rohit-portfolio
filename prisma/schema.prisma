@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Profile {
+  id            Int      @id @default(autoincrement())
+  name          String   @default("Rohit")
+  title         String   @default("Software Engineer")
+  greeting      String   @default("Hey, I'm Rohit! Welcome to my")
+  bio           String   @default("")
+  learningGoals String   @default("")
+  skills        String   @default("") // one skill per line
+  avatarUrl     String?
+  updatedAt     DateTime @updatedAt
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  description String   @default("")
+  techStack   String   @default("") // comma-separated tags
+  imageUrl    String?
+  liveUrl     String?
+  repoUrl     String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Contact {
+  id       Int     @id @default(autoincrement())
+  email    String  @default("")
+  linkedin String?
+  github   String?
+  twitter  String?
+  location String?
+}
+
+model Resume {
+  id        Int      @id @default(autoincrement())
+  fileUrl   String?
+  fileName  String?
+  updatedAt DateTime @updatedAt
+}
+
+model Track {
+  id        Int      @id @default(autoincrement())
+  title     String
+  artist    String   @default("")
+  coverUrl  String?
+  fileUrl   String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model TechStackItem {
+  id        Int      @id @default(autoincrement())
+  name      String
+  logoUrl   String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
