@@ -114,7 +114,7 @@ export default function Dock({ onAppClick, onLaunchpadClick, activeAppIds, isDar
           return (
             <div
               key={app.id}
-              className={`flex flex-col items-center justify-end h-full ${isMobile ? "px-3" : "px-2"}`}
+              className={`flex flex-col items-center justify-end h-full shrink-0 ${isMobile ? "px-3" : "px-2"}`}
               style={{
                 transform: isMobile ? "none" : `translateY(${(scale - 1) * -8}px)`,
                 zIndex: scale > 1 ? 10 : 1,
