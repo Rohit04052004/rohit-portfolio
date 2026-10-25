@@ -1,15 +1,19 @@
-Rohit's portfolio site — a macOS-desktop-styled portfolio built with Next.js, Tailwind, and Prisma/SQLite.
+Rohit's portfolio site — a macOS-desktop-styled portfolio built with Next.js, Tailwind, and Prisma/Postgres.
 
-## Roles
+**Live:** https://resume-rohit-nu.vercel.app
 
-- **Viewer** (default, no login): can browse projects, resume, and contact info.
-- **Admin** (Rohit): logs in at `/admin/login` with the password in `ADMIN_PASSWORD`, then manages everything from `/admin` — projects, profile/bio, resume upload, and contact links. Changes save to the database immediately and show up on the public site right away.
+## Features
+
+- Desktop-style UI ported from a macOS clone: menu bar, dock, Launchpad, Spotlight search, and Control Center.
+- **Viewer** (default, no login): browse projects, resume, contact info, a live Bengaluru weather widget, a Spotify-style music player, and a tech stack widget.
+- **Admin** (Rohit): logs in at `/admin/login` with the password in `ADMIN_PASSWORD`, then manages everything from `/admin` — profile/bio, projects, resume upload, contact links, Spotify tracks, and tech stack logos. Changes save to the database immediately and show up on the public site right away.
+- Responsive mobile layout for the full desktop experience.
 
 ## Getting started
 
 ```bash
 npm install
-cp .env.example .env   # then fill in ADMIN_PASSWORD and SESSION_SECRET
+cp .env.example .env   # fill in DATABASE_URL, ADMIN_PASSWORD, SESSION_SECRET
 npx prisma migrate dev
 npx prisma db seed     # adds mock content you can replace from /admin
 npm run dev
@@ -23,12 +27,6 @@ Generate a `SESSION_SECRET` with:
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-## Known limitation: file uploads in production
-
-Admin-uploaded images/resume PDFs are written to `public/uploads` on disk. That works locally, but **will not persist** on serverless hosts like Vercel (the filesystem is ephemeral/read-only at runtime). Before deploying there, swap the upload route (`src/app/api/upload/route.ts`) to use object storage (e.g. Vercel Blob or S3).
-
-Similarly, the SQLite database file (`prisma/dev.db`) is local-only — for a persistent production database, point `DATABASE_URL` at a hosted SQLite-compatible service (e.g. Turso/libSQL) instead.
-
 ## Tech stack
 
-Next.js (App Router) · TypeScript · Tailwind CSS v4 · Prisma 7 (SQLite via `better-sqlite3` driver adapter) · `jose` for signed session cookies.
+Next.js (App Router) · TypeScript · Tailwind CSS v4 · Prisma 7 (Postgres via Neon, `@prisma/adapter-neon`) · Vercel Blob for admin file uploads · `jose` for signed session cookies. Deployed on Vercel, connected to GitHub for automatic deploys on push to `main`.
