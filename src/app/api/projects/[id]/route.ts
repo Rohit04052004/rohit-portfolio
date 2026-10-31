@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
+import { normalizeUrl } from "@/lib/utils";
 
 const projectUpdateSchema = z.object({
   title: z.string().min(1).optional(),
@@ -36,10 +37,14 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
+  const data = { ...parsed.data };
+  if (data.liveUrl) data.liveUrl = normalizeUrl(data.liveUrl);
+  if (data.repoUrl) data.repoUrl = normalizeUrl(data.repoUrl);
+
   try {
     const project = await prisma.project.update({
       where: { id: projectId },
-      data: parsed.data,
+      data,
     });
     return NextResponse.json(project);
   } catch {

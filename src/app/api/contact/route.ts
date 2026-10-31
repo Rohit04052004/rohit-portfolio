@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
+import { normalizeUrl } from "@/lib/utils";
 
 const contactSchema = z.object({
   email: z.string().email().optional(),
@@ -30,9 +31,14 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
+  const data = { ...parsed.data };
+  if (data.linkedin) data.linkedin = normalizeUrl(data.linkedin);
+  if (data.github) data.github = normalizeUrl(data.github);
+  if (data.twitter) data.twitter = normalizeUrl(data.twitter);
+
   const contact = await prisma.contact.update({
     where: { id: 1 },
-    data: parsed.data,
+    data,
   });
   return NextResponse.json(contact);
 }

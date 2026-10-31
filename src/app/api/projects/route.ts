@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
+import { normalizeUrl } from "@/lib/utils";
 
 const projectSchema = z.object({
   title: z.string().min(1),
@@ -39,6 +40,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "A project with this slug already exists" }, { status: 409 });
   }
 
-  const project = await prisma.project.create({ data: parsed.data });
+  const data = { ...parsed.data };
+  if (data.liveUrl) data.liveUrl = normalizeUrl(data.liveUrl);
+  if (data.repoUrl) data.repoUrl = normalizeUrl(data.repoUrl);
+
+  const project = await prisma.project.create({ data });
   return NextResponse.json(project, { status: 201 });
 }
